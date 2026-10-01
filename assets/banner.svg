@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-label="Estrutura de Dados II">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f3d4c"/><stop offset="1" stop-color="#1fa2a6"/></linearGradient>
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.6" fill="#ffffff" fill-opacity="0.13"/></pattern>
+    <clipPath id="r"><rect width="1200" height="260" rx="22"/></clipPath>
+  </defs>
+  <g clip-path="url(#r)" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+    <rect width="1200" height="260" fill="url(#g)"/>
+    <rect width="1200" height="260" fill="url(#dots)"/>
+    <circle cx="1080" cy="40" r="170" fill="#b9f6ca" fill-opacity="0.16"/>
+    <circle cx="1170" cy="250" r="120" fill="#ffffff" fill-opacity="0.08"/>
+    <text x="1130" y="212" text-anchor="end" font-family="Consolas, 'Courier New', monospace" font-size="150" font-weight="700" fill="#ffffff" fill-opacity="0.10">&lt;/&gt;</text>
+    <rect x="70" y="52" width="64" height="6" rx="3" fill="#b9f6ca"/>
+    <text x="70" y="128" font-size="60" font-weight="800" fill="#ffffff">Estrutura de Dados II</text>
+    <text x="70" y="170" font-size="26" fill="#ffffff" fill-opacity="0.88">Arrays, structs, referências e estruturas dinâmicas em Python</text>
+    <rect x="70" y="188" width="103" height="34" rx="17" fill="#ffffff" fill-opacity="0.16" stroke="#ffffff" stroke-opacity="0.35"/><text x="121.5" y="210" text-anchor="middle" font-size="17" font-weight="600" fill="#ffffff">Python</text><rect x="185" y="188" width="241" height="34" rx="17" fill="#ffffff" fill-opacity="0.16" stroke="#ffffff" stroke-opacity="0.35"/><text x="305.5" y="210" text-anchor="middle" font-size="17" font-weight="600" fill="#ffffff">Vetores e matrizes</text><rect x="438" y="188" width="252" height="34" rx="17" fill="#ffffff" fill-opacity="0.16" stroke="#ffffff" stroke-opacity="0.35"/><text x="564.0" y="210" text-anchor="middle" font-size="17" font-weight="600" fill="#ffffff">Fila com prioridade</text>
+  </g>
+</svg>
