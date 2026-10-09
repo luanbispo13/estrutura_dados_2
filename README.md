@@ -24,6 +24,7 @@ Estudos, listas de exercícios e implementações da disciplina de Estrutura de 
 | Tema | Linguagem | Documento |
 |---|---|---|
 | Grafos: conceitos fundamentais | Python (NetworkX) | [atividade-pratica-grafos.md](unidade3/atividade-pratica-grafos.md) |
+| Grafos: isomorfismo e sequência de graus (Desafios 5 e 7) | Python (NetworkX) | [atividade_desafio5-7.md](unidade3/atividade_desafio5-7.md) |
 
 ---
 
@@ -40,6 +41,7 @@ Simulador "Desfazer" (pilha), spooler de impressão (fila), triagem hospitalar (
 
 **Unidade 3 · Grafos**
 Vértices, arestas, incidência e adjacência, grau, ordem e tamanho, modelagem de rede de amizades (não dirigido) e de ruas de mão única (dirigido) e grafo simples a partir de uma sequência de graus.
+Desafios 5 e 7: isomorfismo entre dois grafos (correspondência de vértices conferida aresta por aresta) e construção de um grafo simples de 8 vértices com a sequência (1, 1, 2, 3, 3, 4, 4, 6), conferindo soma dos graus = 2 × |E|.
 
 ---
 
@@ -54,5 +56,6 @@ Vértices, arestas, incidência e adjacência, grau, ordem e tamanho, modelagem 
 │   ├── atividade3-notebook.md
 │   └── atividade4.md
 └── unidade3/
-    └── atividade-pratica-grafos.md
+    ├── atividade-pratica-grafos.md
+    └── atividade_desafio5-7.md
 ```
