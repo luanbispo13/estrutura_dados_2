@@ -5,91 +5,19 @@
 - RGM: 32635648
 - Turma: Estrutura de Dados II
 - Data: 16/10
-- Ferramenta utilizada: Google Colab com Python (NetworkX, Matplotlib e pandas)
+- Ferramenta utilizada: Google Colab com Python (NetworkX, Matplotlib e Pandas)
 
 ---
 
 ## Contexto da atividade
-
-### Disciplina e conteúdo
-Unidade III - Grafos. Material: [Caderno do Estudante - Projeto ConectaUDF](caderno_estudante_conectaUDF.md) (Algoritmos / Matemática Discreta / Ciência de Dados).
 
 ### Objetivo
 Representar as amizades da rede social fictícia **ConectaUDF** como um grafo não dirigido; calcular graus, número de arestas e densidade; encontrar caminhos; implementar tudo em Python; ampliar a rede e propor uma forma de recomendar amizades.
 
 ### Observações sobre os dados usados
 - Seções 3 a 9: usuários e amizades fornecidos no caderno, sem alteração.
-- Seção 10 (Desafio em grupo): o caderno deixa a ampliação em aberto. Os 4 usuários fictícios e as 6 amizades novas foram criados para esta resolução.
-- Formato da entrega: notebook do Google Colab com as explicações, os desenhos e o código. O notebook não está no repositório; este documento reúne o mesmo conteúdo e conta como ele foi construído.
-
----
-
-## Como o projeto foi criado
-
-| Etapa | O que foi feito | Ferramenta |
-|---|---|---|
-| 1. Escopo | Leitura do caderno e definição do formato (notebook Colab), do estilo dos desenhos (diagramas coloridos), de quem criaria os usuários do desafio e do nível do código (completo) | Caderno do estudante |
-| 2. Cálculos à mão | Graus, soma dos graus, arestas, densidade e caminhos, antes de qualquer código | Papel e lápis |
-| 3. Desenhos | 7 figuras com posições fixas e cores com significado (detalhes na próxima seção) | Python + Matplotlib |
-| 4. Explicações | Uma analogia por conceito: aperto de mão (soma dos graus), álbum de figurinhas (densidade), pedra no lago (BFS) | Markdown |
-| 5. Código | Lista de adjacência montada a partir dos pares, BFS feita à mão, recomendação por amigos em comum e desenhos com NetworkX | Google Colab |
-| 6. Conferência | Notebook executado de ponta a ponta; resultados comparados com as funções do NetworkX e casos extras testados | NetworkX |
-| 7. Documentação | Este documento e a atualização do README | GitHub |
-
-### Decisões de projeto
-- **Lista de amizades em vez de dicionário digitado à mão.** O código recebe cada amizade uma vez, como par `("Ana", "Bruno")`, e monta a lista de adjacência sozinho, com a "mão dupla" garantida. Assim não existe o risco de colocar Bruno na lista da Ana e esquecer a Ana na lista do Bruno.
-- **BFS implementada à mão.** O NetworkX já tem `shortest_path`, mas a ideia era mostrar o algoritmo. A biblioteca entra só no fim, para conferir se a BFS própria chega aos mesmos caminhos.
-- **Desafio em grupo pensado para ensinar algo.** As 6 amizades novas foram escolhidas para que:
-  1. o Felipe virasse a única ponte entre a turma original e a nova (vértice de corte);
-  2. Gabriel e Igor tivessem exatamente **3 amigos em comum**, ligando o desafio à pergunta de reflexão da seção 12;
-  3. o desenho continuasse sem cruzamento de linhas.
-
----
-
-## Os desenhos
-
-### Por que esse layout
-O grafo original foi desenhado como **triângulo + quadrado + triângulo**:
-- triângulo Ana-Bruno-Carla;
-- quadrado Bruno-Diego-Elisa-Carla;
-- triângulo Diego-Felipe-Elisa.
-
-Com isso, nenhuma linha cruza outra (o grafo é planar), e o desenho é fácil de copiar à mão. Há um bônus: a posição horizontal de cada usuário coincide com a distância dele até a Ana (0, 1, 2 ou 3 passos). A figura da BFS aproveita exatamente isso.
-
-Na rede ampliada, os usuários novos formam um **losango** à direita do Felipe: Gabriel em cima, Igor embaixo, Helena no centro e Joana na ponta. Continua sem cruzamentos.
-
-As mesmas coordenadas são usadas nas figuras e no código (dicionário `POSICOES`), então o que o código desenha bate com as imagens deste documento.
-
-| Usuário | Posição (x, y) | | Usuário | Posição (x, y) |
-|---|---|---|---|---|
-| Ana | (0, 0) | | Felipe | (4.4, 0) |
-| Bruno | (1.3, 1.1) | | Gabriel | (5.8, 1.1) |
-| Carla | (1.3, -1.1) | | Helena | (5.8, 0) |
-| Diego | (3.1, 1.1) | | Igor | (5.8, -1.1) |
-| Elisa | (3.1, -1.1) | | Joana | (7.2, 0) |
-
-### O que cada cor significa
-
-| Figura | O que mostra | Leitura das cores |
-|---|---|---|
-| 1. Grafo | As 8 amizades numeradas conforme a lista do caderno | Uma cor por usuário; números nas linhas = posição na lista |
-| 2. Graus | Grau de cada usuário | Laranja = grau 3, azul-claro = grau 2; selo escuro = valor do grau |
-| 3. Densidade | Amizades existentes x possíveis | Linha preta = existe (8); vermelha tracejada = poderia existir (7) |
-| 4. Caminhos | Os dois menores caminhos Ana → Felipe | Azul = caminho 1, laranja = caminho 2; números = ordem dos passos |
-| 5. BFS | A busca se espalhando a partir da Ana | Faixas mais escuras = mais passos de distância |
-| 6. Rede ampliada | Rede com 10 usuários | Azul = originais, verde = novos, linhas verdes = amizades novas, anel dourado = mais conectado |
-| 7. Recomendação | Par sugerido e amigos em comum | Rosa = par sugerido, amarelo com anel = amigos em comum, curva tracejada = sugestão |
-
-### Como foram feitos
-- **Figuras 1 a 7:** Python + Matplotlib, desenhando círculos (`Circle`), linhas e legendas sobre as posições fixas da tabela acima.
-- **Desenho do código:** `nx.draw_networkx_*` do NetworkX, com as mesmas posições. Usuários sem posição definida são encaixados automaticamente por `spring_layout`.
-- **Versões em Mermaid:** diagramas em texto que o GitHub desenha sozinho, no mesmo estilo das outras atividades. O Mermaid escolhe o próprio layout, então a forma pode variar, mas as ligações são as mesmas.
-
-### Ajuste feito durante a criação
-Na primeira versão da Figura 7, a linha tracejada entre Gabriel e Igor passava por cima da Joana e da Helena e confundia a leitura. Ela foi trocada por uma curva que contorna a Joana pela direita.
-
-No desenho gerado pelo código o problema era parecido: a linha da sugestão se sobrepunha às amizades da Helena. A solução foi não desenhar a linha e, em vez disso, pintar o par sugerido de rosa e destacar em amarelo os amigos em comum e as amizades que levam até eles.
-
+- Seção 10 (Desafio em grupo): os 4 usuários fictícios e as 6 amizades novas foram criados para esta resolução.
+- Notebook Google Colab: https://colab.research.google.com/drive/1ePhUpAdvS-rI3D2Td9fvmgGFXkpCa3P0?usp=sharing
 ---
 
 ## Seções 1 e 2 - O desafio e os conceitos
@@ -112,22 +40,6 @@ O grafo é **não dirigido** porque a amizade é recíproca: se Ana é amiga de 
 R:
 
 ![Figura 1 - Grafo da rede ConectaUDF](img/conectaUDF_fig1_grafo.png)
-
-Versão em Mermaid (o número em cada linha é a posição da amizade na lista do caderno):
-
-```mermaid
-graph LR
-    Ana ---|1| Bruno
-    Ana ---|2| Carla
-    Bruno ---|3| Carla
-    Bruno ---|4| Diego
-    Carla ---|5| Elisa
-    Diego ---|6| Elisa
-    Diego ---|7| Felipe
-    Elisa ---|8| Felipe
-```
-
-Conferência (passo 5 do caderno): aparecem as linhas de 1 a 8, sem nenhuma repetida.
 
 ---
 
@@ -236,22 +148,6 @@ Densidade: 53.33%
 
 ![Figura 4 - Os dois menores caminhos de Ana até Felipe](img/conectaUDF_fig4_caminhos.png)
 
-Versão em Mermaid (azul = caminho 1, laranja = caminho 2):
-
-```mermaid
-graph LR
-    Ana --- Bruno
-    Ana --- Carla
-    Bruno --- Carla
-    Bruno --- Diego
-    Carla --- Elisa
-    Diego --- Elisa
-    Diego --- Felipe
-    Elisa --- Felipe
-    linkStyle 0,3,6 stroke:#2563EB,stroke-width:4px
-    linkStyle 1,4,7 stroke:#EA580C,stroke-width:4px
-```
-
 ### Pergunta. Encontre um caminho de Ana até Felipe.
 R: `Ana → Bruno → Diego → Felipe`
 
@@ -287,31 +183,6 @@ R: Foram criadas 6:
 | 14 | Igor — Joana |
 
 ![Figura 6 - Rede ampliada](img/conectaUDF_fig6_ampliada.png)
-
-Versão em Mermaid (verde = usuários e amizades novas, amarelo = mais conectado):
-
-```mermaid
-graph LR
-    Ana --- Bruno
-    Ana --- Carla
-    Bruno --- Carla
-    Bruno --- Diego
-    Carla --- Elisa
-    Diego --- Elisa
-    Diego --- Felipe
-    Elisa --- Felipe
-    Felipe --- Gabriel
-    Felipe --- Igor
-    Gabriel --- Helena
-    Gabriel --- Joana
-    Helena --- Igor
-    Igor --- Joana
-    classDef novo fill:#86EFAC,stroke:#16A34A,color:#1F2937
-    classDef hub fill:#FDE68A,stroke:#F59E0B,stroke-width:3px,color:#1F2937
-    class Gabriel,Helena,Igor,Joana novo
-    class Felipe hub
-    linkStyle 8,9,10,11,12,13 stroke:#16A34A,stroke-width:3px
-```
 
 ### 3. Atualize a lista de adjacência no Python.
 R:
@@ -370,38 +241,7 @@ R: Pelo número de **amigos em comum**, a mesma ideia do "Pessoas que você talv
 
 ![Figura 7 - Recomendação por amigos em comum](img/conectaUDF_fig7_recomendacao.png)
 
-Versão em Mermaid (só a parte da rede envolvida na sugestão):
-
-```mermaid
-graph LR
-    Gabriel --- Felipe
-    Gabriel --- Helena
-    Gabriel --- Joana
-    Igor --- Felipe
-    Igor --- Helena
-    Igor --- Joana
-    Gabriel -.-|sugestão| Igor
-    classDef par fill:#F472B6,stroke:#DB2777,color:#FFFFFF
-    classDef comum fill:#FEF3C7,stroke:#F59E0B,stroke-width:3px,color:#1F2937
-    class Gabriel,Igor par
-    class Felipe,Helena,Joana comum
-```
-
----
-
-## Seção 11 - Entrega
-
-| Item pedido | Onde está neste documento |
-|---|---|
-| Desenho do grafo | Seções 3 e 4 (Figura 1) e Seção 10 (Figura 6) |
-| Tabela com os graus | Seção 5 e Seção 10, item 4 |
-| Cálculos de arestas e densidade | Seções 6 e 7 e Seção 10, itens 4 e 5 |
-| Código Python executável | Seção 8 e [Código completo](#código-completo-google-colab) |
-| Respostas às perguntas e conclusão | Seções 5, 7, 9, 10 e 12 e [Conclusão](#conclusão) |
-
----
-
-## Seção 12 - Pergunta de reflexão
+## Pergunta de reflexão
 
 ### Pergunta. Duas pessoas ainda não são amigas, mas têm três amigos em comum. Como essa informação poderia ser usada para sugerir uma nova conexão?
 R: Três amigos em comum indicam que as duas pessoas circulam no mesmo grupo. A rede pode sugerir a conexão em "Pessoas que você talvez conheça" e mostrar o motivo ("3 amigos em comum"), o que deixa a sugestão mais confiável. É exatamente o caso de Gabriel e Igor no desafio.
@@ -733,18 +573,6 @@ Usuário 'ponte' da rede ampliada (se sair, a rede quebra): Felipe
 
 ![Desenho gerado pelo código](img/conectaUDF_saida_codigo.png)
 
----
-
-## Validação
-
-Antes de entregar, conferi:
-- **Graus, arestas e densidade:** calculados à mão e confirmados pelo código, nas duas redes (53,33 % e 31,11 %).
-- **Conferência com o NetworkX:** número de arestas, densidade (`nx.density`) e menores caminhos (`nx.all_shortest_paths`) bateram com as funções próprias.
-- **Casos extras testados:** amizade repetida (é ignorada), usuário sem posição definida (o layout automático encaixa) e usuários sem caminho entre si (a BFS devolve lista vazia).
-- **Diâmetro e ponte:** diâmetro da rede original = 3 (`nx.diameter`); único vértice de corte da rede ampliada = Felipe (`nx.articulation_points`).
-
----
-
 ## Conclusão
 
 O grafo transformou uma lista de amizades em algo mensurável:
@@ -757,11 +585,7 @@ A ampliação mostrou duas coisas. Primeiro, redes maiores tendem a ficar menos 
 
 ---
 
-## Referência
-
-Material de apoio: Caderno do Estudante - Projeto ConectaUDF: redes sociais com grafos (Algoritmos / Matemática Discreta / Ciência de Dados).
-
 ### Inteligência artificial utilizada
-- Ferramenta: Claude (Anthropic), modelo Claude Opus 5.5
+- Ferramenta: Claude (Anthropic)
 - Uso: apoio na resolução, na criação dos diagramas, no código e nesta documentação
 - Data de uso: 16/10/2026
