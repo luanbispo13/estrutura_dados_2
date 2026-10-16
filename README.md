@@ -52,7 +52,6 @@ Projeto ConectaUDF: rede de amizades com 6 usuários (grafo não dirigido), com 
 ```text
 .
 ├── README.md
-├── caderno_estudante_conectaUDF.md
 ├── unidade1/
 │   ├── atividade2.md
 │   ├── atividade3.md
@@ -61,6 +60,7 @@ Projeto ConectaUDF: rede de amizades com 6 usuários (grafo não dirigido), com 
 └── unidade3/
     ├── atividade-pratica-grafos.md
     ├── atividade_desafio5-7.md
+    ├── caderno_estudante_conectaUDF.md
     ├── projeto-conectaUDF.md
     └── img/
         └── conectaUDF_*.png   (8 figuras do projeto ConectaUDF)

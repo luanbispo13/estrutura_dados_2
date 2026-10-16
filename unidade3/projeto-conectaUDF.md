@@ -12,7 +12,7 @@
 ## Contexto da atividade
 
 ### Disciplina e conteúdo
-Unidade III - Grafos. Material: [Caderno do Estudante - Projeto ConectaUDF](../caderno_estudante_conectaUDF.md) (Algoritmos / Matemática Discreta / Ciência de Dados).
+Unidade III - Grafos. Material: [Caderno do Estudante - Projeto ConectaUDF](caderno_estudante_conectaUDF.md) (Algoritmos / Matemática Discreta / Ciência de Dados).
 
 ### Objetivo
 Representar as amizades da rede social fictícia **ConectaUDF** como um grafo não dirigido; calcular graus, número de arestas e densidade; encontrar caminhos; implementar tudo em Python; ampliar a rede e propor uma forma de recomendar amizades.
