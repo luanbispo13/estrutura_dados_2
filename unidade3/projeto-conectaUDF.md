@@ -582,10 +582,3 @@ O grafo transformou uma lista de amizades em algo mensurável:
 - os amigos em comum geram recomendações.
 
 A ampliação mostrou duas coisas. Primeiro, redes maiores tendem a ficar menos densas. Segundo, um único usuário pode virar ponte crítica: se o Felipe sair, a rede se divide.
-
----
-
-### Inteligência artificial utilizada
-- Ferramenta: Claude (Anthropic)
-- Uso: apoio na resolução, na criação dos diagramas, no código e nesta documentação
-- Data de uso: 16/10/2026
