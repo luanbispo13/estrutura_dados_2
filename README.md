@@ -25,6 +25,7 @@ Estudos, listas de exercícios e implementações da disciplina de Estrutura de 
 |---|---|---|
 | Grafos: conceitos fundamentais | Python (NetworkX) | [atividade-pratica-grafos.md](unidade3/atividade-pratica-grafos.md) |
 | Grafos: isomorfismo e sequência de graus (Desafios 5 e 7) | Python (NetworkX) | [atividade_desafio5-7.md](unidade3/atividade_desafio5-7.md) |
+| Projeto ConectaUDF: rede social com grafos (graus, densidade, BFS e recomendação) | Python (NetworkX, Matplotlib) | [projeto-conectaUDF.md](unidade3/projeto-conectaUDF.md) |
 
 ---
 
@@ -42,6 +43,7 @@ Simulador "Desfazer" (pilha), spooler de impressão (fila), triagem hospitalar (
 **Unidade 3 · Grafos**
 Vértices, arestas, incidência e adjacência, grau, ordem e tamanho, modelagem de rede de amizades (não dirigido) e de ruas de mão única (dirigido) e grafo simples a partir de uma sequência de graus.
 Desafios 5 e 7: isomorfismo entre dois grafos (correspondência de vértices conferida aresta por aresta) e construção de um grafo simples de 8 vértices com a sequência (1, 1, 2, 3, 3, 4, 4, 6), conferindo soma dos graus = 2 × |E|.
+Projeto ConectaUDF: rede de amizades com 6 usuários (grafo não dirigido), com graus, arestas pela soma dos graus, densidade (53,33 %), menores caminhos por BFS e lista de adjacência em Python. Desafio em grupo: rede ampliada para 10 usuários (densidade 31,11 %), vértice de corte e recomendação de amizade por amigos em comum. Inclui 7 diagramas coloridos e versões em Mermaid.
 
 ---
 
@@ -50,6 +52,7 @@ Desafios 5 e 7: isomorfismo entre dois grafos (correspondência de vértices con
 ```text
 .
 ├── README.md
+├── caderno_estudante_conectaUDF.md
 ├── unidade1/
 │   ├── atividade2.md
 │   ├── atividade3.md
@@ -57,5 +60,8 @@ Desafios 5 e 7: isomorfismo entre dois grafos (correspondência de vértices con
 │   └── atividade4.md
 └── unidade3/
     ├── atividade-pratica-grafos.md
-    └── atividade_desafio5-7.md
+    ├── atividade_desafio5-7.md
+    ├── projeto-conectaUDF.md
+    └── img/
+        └── conectaUDF_*.png   (8 figuras do projeto ConectaUDF)
 ```
