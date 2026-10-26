@@ -25,7 +25,7 @@ Estudos, listas de exercícios e implementações da disciplina de Estrutura de 
 |---|---|---|
 | Grafos: conceitos fundamentais | Python (NetworkX) | [atividade-pratica-grafos.md](unidade3/atividade-pratica-grafos.md) |
 | Grafos: isomorfismo e sequência de graus (Desafios 5 e 7) | Python (NetworkX) | [atividade_desafio5-7.md](unidade3/atividade_desafio5-7.md) |
-| Projeto ConectaUDF: rede social com grafos (graus, densidade, BFS e recomendação) | Python (NetworkX, Matplotlib) | [projeto-conectaUDF.md](unidade3/grafos/projeto-conectaUDF.md) |
+| Projeto ConectaUDF: rede social com grafos (graus, densidade, BFS e recomendação) | Python (NetworkX, Matplotlib) | [projeto-conectaUDF.md](grafos/projeto-conectaUDF.md) |
 
 ---
 
