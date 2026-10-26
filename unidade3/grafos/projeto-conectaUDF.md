@@ -39,13 +39,13 @@ O grafo é **não dirigido** porque a amizade é recíproca: se Ana é amiga de 
 ### Pergunta. Desenhe o grafo.
 R:
 
-![Figura 1 - Grafo da rede ConectaUDF](img/conectaUDF_fig1_grafo.png)
+![Figura 1 - Grafo da rede ConectaUDF](conectaUDF_fig1_grafo.png)
 
 ---
 
 ## Seção 5 - Grau de cada usuário
 
-![Figura 2 - Grau de cada usuário](img/conectaUDF_fig2_graus.png)
+![Figura 2 - Grau de cada usuário](conectaUDF_fig2_graus.png)
 
 | Usuário | Amigos diretos | Grau |
 |---|---|---:|
@@ -73,7 +73,7 @@ Por que dividir por 2? Num aperto de mão entre Ana e Bruno, os dois contam "ape
 
 ## Seção 7 - Densidade
 
-![Figura 3 - Amizades existentes x possíveis](img/conectaUDF_fig3_densidade.png)
+![Figura 3 - Amizades existentes x possíveis](conectaUDF_fig3_densidade.png)
 
 Amizades possíveis: cada um dos 6 usuários pode ser amigo dos outros 5, o que dá 6 × 5 = 30. Como Ana–Bruno é a mesma amizade que Bruno–Ana, são 30 ÷ 2 = **15**.
 
@@ -146,7 +146,7 @@ Densidade: 53.33%
 
 ## Seção 9 - Caminho de Ana até Felipe
 
-![Figura 4 - Os dois menores caminhos de Ana até Felipe](img/conectaUDF_fig4_caminhos.png)
+![Figura 4 - Os dois menores caminhos de Ana até Felipe](conectaUDF_fig4_caminhos.png)
 
 ### Pergunta. Encontre um caminho de Ana até Felipe.
 R: `Ana → Bruno → Diego → Felipe`
@@ -161,7 +161,7 @@ Não existe caminho menor. Ana e Felipe não são amigos, então 1 passo não ba
 
 O computador encontra o menor caminho com a **BFS (busca em largura)**. Ela funciona como uma pedra jogada no lago: a primeira onda alcança os amigos da Ana, a segunda alcança os amigos dos amigos, e assim por diante. A onda em que o Felipe é alcançado dá o tamanho do menor caminho.
 
-![Figura 5 - BFS em ondas a partir da Ana](img/conectaUDF_fig5_bfs.png)
+![Figura 5 - BFS em ondas a partir da Ana](conectaUDF_fig5_bfs.png)
 
 ---
 
@@ -182,7 +182,7 @@ R: Foram criadas 6:
 | 13 | Helena — Igor |
 | 14 | Igor — Joana |
 
-![Figura 6 - Rede ampliada](img/conectaUDF_fig6_ampliada.png)
+![Figura 6 - Rede ampliada](conectaUDF_fig6_ampliada.png)
 
 ### 3. Atualize a lista de adjacência no Python.
 R:
@@ -239,7 +239,7 @@ R: Pelo número de **amigos em comum**, a mesma ideia do "Pessoas que você talv
 | Felipe – Joana | Gabriel, Igor | 2 |
 | Helena – Joana | Gabriel, Igor | 2 |
 
-![Figura 7 - Recomendação por amigos em comum](img/conectaUDF_fig7_recomendacao.png)
+![Figura 7 - Recomendação por amigos em comum](conectaUDF_fig7_recomendacao.png)
 
 ## Pergunta de reflexão
 
@@ -571,7 +571,7 @@ Maior distância entre dois usuários (diâmetro), rede original: 3
 Usuário 'ponte' da rede ampliada (se sair, a rede quebra): Felipe
 ```
 
-![Desenho gerado pelo código](img/conectaUDF_saida_codigo.png)
+![Desenho gerado pelo código](conectaUDF_saida_codigo.png)
 
 ## Conclusão
 
