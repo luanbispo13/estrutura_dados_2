@@ -22,7 +22,6 @@ Atividade em que montei uma rede fictícia de 10 cidades e usei BFS e DFS para a
 | [`solucao_grafos.ipynb`](solucao_grafos.ipynb) | Notebook com o mesmo código, pronto para rodar no Colab |
 | [`grafo_diagrama.png`](grafo_diagrama.png) | Desenho da rede (10 cidades e 14 conexões) |
 | [`grafo_cenarios.png`](grafo_cenarios.png) | BFS e DFS no cenário normal e com o bloqueio Goiânia–São Paulo |
-| [`roteiro_apresentacao.md`](roteiro_apresentacao.md) | O que vou falar nos 5 minutos de apresentação |
 | [`Material_Estudante_Grafos_BFS_DFS.md`](Material_Estudante_Grafos_BFS_DFS.md) · [`.pdf`](Material_Estudante_Grafos_BFS_DFS.pdf) | Enunciado da atividade |
 
 ## Como rodar
