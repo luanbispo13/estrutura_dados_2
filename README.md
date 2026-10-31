@@ -26,7 +26,7 @@ Estudos, listas de exercícios e implementações da disciplina de Estrutura de 
 | Grafos: conceitos fundamentais | Python (NetworkX) | [atividade-pratica-grafos.md](unidade3/atividade-pratica-grafos.md) |
 | Grafos: isomorfismo e sequência de graus (Desafios 5 e 7) | Python (NetworkX) | [atividade_desafio5-7.md](unidade3/atividade_desafio5-7.md) |
 | Projeto ConectaUDF: rede social com grafos (graus, densidade, BFS e recomendação) | Python (NetworkX, Matplotlib) | [projeto-conectaUDF.md](grafos/projeto-conectaUDF.md) |
-| Grafos: BFS e DFS em rede fictícia (bloqueio de conexões, menor corte e testes) | Python (Colab, Matplotlib) | [atividade-grafos-bfs-dfs.md](grafos_bfs_dfs/atividade-grafos-bfs-dfs.md) · [notebook](grafos_bfs_dfs/solucao_grafos.ipynb) |
+| Grafos: BFS e DFS numa rede inventada de cidades (bloqueios, menor corte e testes) | Python (Colab, Matplotlib) | [atividade-grafos-bfs-dfs.md](grafos_bfs_dfs/atividade-grafos-bfs-dfs.md) · [notebook](grafos_bfs_dfs/solucao_grafos.ipynb) |
 
 ---
 

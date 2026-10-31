@@ -11,18 +11,18 @@
 - Ferramenta utilizada: Google Colab com Python (matplotlib e networkx)
 
 ## Contexto
-Nessa atividade eu montei uma rede de cidades inventada e usei BFS e DFS para achar caminhos de Brasília até Curitiba. A pane de GPS no Aeroporto de Brasília (G1, 22/09/2026) é só a motivação do problema. As cidades, as conexões e os bloqueios são **fictícios** e não servem para planejar voo de verdade.
+Nessa atividade eu montei uma rede de cidades inventada e usei BFS e DFS para achar caminhos de Brasília até Curitiba. A notícia da pane de GPS no Aeroporto de Brasília (G1, 22/09/2026) foi só a ideia para o problema. As cidades, as conexões e os bloqueios são inventados, então não dá para usar isso para planejar voo de verdade.
 
 Referência: GOMES, Paulo César Rodacki. *Grafos: conceitos fundamentais, algoritmos e aplicações*. Blumenau: Editora IFC, 2022.
 
 ### Observações sobre os dados usados
-O material deixa a construção do grafo em aberto, então as cidades, as conexões e os bloqueios foram definidos por mim. Os bloqueios são hipóteses de simulação, não consequência comprovada da pane.
+O material não diz como montar o grafo, então eu escolhi as cidades, as conexões e os bloqueios. Os bloqueios são só suposições para a simulação, não são resultado da pane.
 
 P: Quantas conexões eu preciso bloquear para Brasília não conseguir mais chegar em Curitiba? E como BFS e DFS se comportam em cada cenário?
 
 ## 1. Bibliotecas
 
-O BFS e o DFS foram feitos só com a biblioteca padrão. O `matplotlib` desenha o diagrama e o `networkx` entra apenas nos testes, para conferir meus resultados com uma biblioteca pronta. No Colab já vem tudo instalado.
+O BFS e o DFS eu fiz só com a biblioteca padrão do Python. O `matplotlib` serve para desenhar e o `networkx` eu usei só nos testes, para conferir se meus resultados batem com os de uma biblioteca pronta. No Colab já vem tudo instalado.
 
 ```python
 import sys
@@ -53,11 +53,34 @@ matplotlib : 3.11.2
 
 ## 2. O grafo que eu montei
 
-D: o grafo precisa ter pelo menos 7 vértices e as conexões precisam ter justificativa.
+P: desenhe um grafo com pelo menos 7 vértices e conexões justificadas.
 
-R: fiz um grafo com **10 cidades** e **14 conexões**, não dirigido e sem pesos (cada conexão conta como 1 salto). Coloquei dois "centros" (São Paulo e Goiânia), algumas rotas alternativas entre Brasília e Curitiba e uma ponta no sul (Florianópolis e Porto Alegre).
+R: montei um grafo com 10 cidades (vértices) e 14 conexões (arestas). Ele não é dirigido e não tem pesos, então cada conexão conta como 1 passo. Pensei em dois pontos centrais (São Paulo e Goiânia), algumas rotas diferentes entre Brasília e Curitiba e uma ponta no sul (Florianópolis e Porto Alegre).
 
-Montei a lista de adjacência a partir da lista de arestas. Assim cada conexão entra nas listas dos dois lados e o grafo fica simétrico.
+Vértices: Brasília, Goiânia, Belo Horizonte, Cuiabá, São Paulo, Campo Grande, Rio de Janeiro, Curitiba, Florianópolis e Porto Alegre.
+
+Conexões e o motivo de cada uma:
+
+| # | Conexão | Justificativa |
+|---|---|---|
+| 1 | Brasília - Goiânia | ficam perto, no Centro-Oeste |
+| 2 | Brasília - Belo Horizonte | liga o Centro-Oeste a Minas |
+| 3 | Brasília - Cuiabá | liga o DF ao Mato Grosso |
+| 4 | Goiânia - São Paulo | caminho do Centro-Oeste para São Paulo |
+| 5 | Goiânia - Campo Grande | caminho de Goiás para o Mato Grosso do Sul |
+| 6 | Belo Horizonte - Rio de Janeiro | Minas e Rio ficam perto |
+| 7 | Belo Horizonte - São Paulo | Minas e São Paulo ficam perto |
+| 8 | Rio de Janeiro - São Paulo | Rio e São Paulo são muito ligadas |
+| 9 | São Paulo - Curitiba | entrada no Sul pelo lado de São Paulo |
+| 10 | Rio de Janeiro - Curitiba | rota direta do Rio, alternativa a São Paulo |
+| 11 | Cuiabá - Campo Grande | liga o Mato Grosso ao Mato Grosso do Sul |
+| 12 | Campo Grande - Curitiba | rota pelo oeste até Curitiba |
+| 13 | Curitiba - Florianópolis | Paraná e Santa Catarina |
+| 14 | Florianópolis - Porto Alegre | Santa Catarina e Rio Grande do Sul (ponta da rede) |
+
+Depois montei a lista de adjacência a partir da lista de arestas. Assim cada conexão entra na lista dos dois lados. O desenho do grafo vem logo abaixo.
+
+O desenho com uma conexão bloqueada está no Experimento B (seção 5).
 
 ```python
 ARESTAS = [
@@ -96,7 +119,7 @@ for vertice, vizinhos in rede.items():
 
 print("\nConexões e o motivo de cada uma:")
 for a, b, motivo in ARESTAS:
-    print(f"  {a} – {b}: {motivo}")
+    print(f"  {a} - {b}: {motivo}")
 ```
 
 Saída:
@@ -117,32 +140,103 @@ Lista de adjacência (grau entre parênteses):
   Porto Alegre (1): ['Florianópolis']
 
 Conexões e o motivo de cada uma:
-  Brasília – Goiânia: ficam perto, no Centro-Oeste
-  Brasília – Belo Horizonte: liga o Centro-Oeste a Minas
-  Brasília – Cuiabá: liga o DF ao Mato Grosso
-  Goiânia – São Paulo: caminho do Centro-Oeste para São Paulo
-  Goiânia – Campo Grande: caminho de Goiás para o Mato Grosso do Sul
-  Belo Horizonte – Rio de Janeiro: Minas e Rio ficam perto
-  Belo Horizonte – São Paulo: Minas e São Paulo ficam perto
-  Rio de Janeiro – São Paulo: Rio e São Paulo são muito ligadas
-  São Paulo – Curitiba: entrada no Sul pelo lado de São Paulo
-  Rio de Janeiro – Curitiba: rota direta do Rio, alternativa a São Paulo
-  Cuiabá – Campo Grande: liga o Mato Grosso ao Mato Grosso do Sul
-  Campo Grande – Curitiba: rota pelo oeste até Curitiba
-  Curitiba – Florianópolis: Paraná e Santa Catarina
-  Florianópolis – Porto Alegre: Santa Catarina e Rio Grande do Sul (ponta da rede)
+  Brasília - Goiânia: ficam perto, no Centro-Oeste
+  Brasília - Belo Horizonte: liga o Centro-Oeste a Minas
+  Brasília - Cuiabá: liga o DF ao Mato Grosso
+  Goiânia - São Paulo: caminho do Centro-Oeste para São Paulo
+  Goiânia - Campo Grande: caminho de Goiás para o Mato Grosso do Sul
+  Belo Horizonte - Rio de Janeiro: Minas e Rio ficam perto
+  Belo Horizonte - São Paulo: Minas e São Paulo ficam perto
+  Rio de Janeiro - São Paulo: Rio e São Paulo são muito ligadas
+  São Paulo - Curitiba: entrada no Sul pelo lado de São Paulo
+  Rio de Janeiro - Curitiba: rota direta do Rio, alternativa a São Paulo
+  Cuiabá - Campo Grande: liga o Mato Grosso ao Mato Grosso do Sul
+  Campo Grande - Curitiba: rota pelo oeste até Curitiba
+  Curitiba - Florianópolis: Paraná e Santa Catarina
+  Florianópolis - Porto Alegre: Santa Catarina e Rio Grande do Sul (ponta da rede)
 ```
+
+### Desenho do grafo
+
+D: coloquei as cidades mais ou menos onde ficam no mapa (longitude e latitude), só para o desenho ficar fácil de entender. O grafo não usa distância.
+
+```python
+POSICOES = {  # (longitude, latitude) aproximadas, só para desenhar
+    "Brasília": (-47.9, -15.8), "Goiânia": (-49.3, -16.7), "Belo Horizonte": (-43.9, -19.9),
+    "Rio de Janeiro": (-43.2, -22.9), "São Paulo": (-46.6, -23.5), "Curitiba": (-49.3, -25.4),
+    "Florianópolis": (-48.5, -27.6), "Porto Alegre": (-51.2, -30.0),
+    "Cuiabá": (-56.1, -15.6), "Campo Grande": (-54.6, -20.4),
+}
+# onde o nome da cidade fica em relação à bolinha: (dx, dy, alinhamento horizontal, alinhamento vertical)
+ROTULO_PADRAO = (0.0, 0.95, "center", "bottom")  # em cima da bolinha
+ROTULOS = {
+    "Goiânia": (-0.8, 0.0, "right", "center"),
+    "Campo Grande": (-0.8, 0.0, "right", "center"),
+    "Belo Horizonte": (0.8, 0.0, "left", "center"),
+    "Rio de Janeiro": (0.8, 0.0, "left", "center"),
+    "São Paulo": (-0.8, 0.3, "right", "center"),
+    "Curitiba": (-0.8, -0.1, "right", "center"),
+    "Florianópolis": (0.8, 0.0, "left", "center"),
+}
+COR_CAMINHO, COR_BLOQUEIO, COR_BASE = "#1f77b4", "#d62728", "#b5b5b5"
+COR_ORIGEM, COR_DESTINO = "#2ca02c", "#9467bd"
+
+
+def desenhar(ax, titulo, bloqueios=(), caminho=None, destaques=None):
+    bloqueadas = {frozenset(par) for par in bloqueios}
+    no_caminho = {frozenset(par) for par in zip(caminho, caminho[1:])} if caminho else set()
+    for a, b, _ in ARESTAS:
+        (x1, y1), (x2, y2) = POSICOES[a], POSICOES[b]
+        chave = frozenset((a, b))
+        if chave in bloqueadas:
+            estilo = dict(color=COR_BLOQUEIO, linestyle="--", linewidth=2.4, zorder=2)
+        elif chave in no_caminho:
+            estilo = dict(color=COR_CAMINHO, linewidth=5, zorder=2)
+        else:
+            estilo = dict(color=COR_BASE, linewidth=1.8, zorder=1)
+        ax.plot([x1, x2], [y1, y2], **estilo)
+    for vertice, (x, y) in POSICOES.items():
+        cor = (destaques or {}).get(vertice, "#ffffff")
+        ax.scatter(x, y, s=420, color=cor, edgecolor="#333333", linewidth=1.5, zorder=3)
+        dx, dy, ha, va = ROTULOS.get(vertice, ROTULO_PADRAO)
+        ax.text(x + dx, y + dy, vertice, ha=ha, va=va, fontsize=9.5, zorder=4,
+                bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85))
+    ax.set_title(titulo, fontsize=12)
+    ax.set_axis_off()
+    ax.margins(0.1)
+
+
+def legenda(fig):
+    itens = [Line2D([0], [0], color=COR_BASE, lw=2, label="Conexão disponível"),
+             Line2D([0], [0], color=COR_CAMINHO, lw=5, label="Caminho encontrado"),
+             Line2D([0], [0], color=COR_BLOQUEIO, lw=2.4, ls="--", label="Conexão bloqueada")]
+    for cor, rotulo in ((COR_ORIGEM, "Origem"), (COR_DESTINO, "Destino")):
+        itens.append(Line2D([0], [0], marker="o", color="w", markerfacecolor=cor,
+                            markeredgecolor="#333333", markersize=11, label=rotulo))
+    fig.legend(handles=itens, loc="lower center", ncol=len(itens), frameon=False, fontsize=10)
+
+
+fig, ax = plt.subplots(figsize=(10, 8))
+desenhar(ax, f"Rede inventada de conexões: {len(rede)} cidades e {len(ARESTAS)} conexões")
+fig.tight_layout()
+fig.savefig("grafo_diagrama.png", dpi=150, bbox_inches="tight")
+plt.show()
+```
+
+![Diagrama do grafo](grafo_diagrama.png)
+
+R: esse é o grafo com as conexões da tabela acima. Cada traço cinza é uma conexão.
 
 ## 3. As funções
 
 P: implementar BFS, DFS e o bloqueio de conexões sem mexer no grafo original.
 
 R:
-- **BFS:** usa uma fila (`deque`). Marco o vértice como visitado quando coloco ele na fila.
-- **DFS:** usa uma pilha (lista). Empilho os vizinhos ao contrário para o primeiro vizinho da lista ser o primeiro a ser explorado. Fiz iterativo para não depender do limite de recursão.
-- Os dois devolvem a lista de cidades do caminho, `[origem]` se origem e destino forem iguais, ou `None` se não existir caminho.
-- **Bloqueio:** a função `bloquear_conexoes` trabalha numa **cópia** da rede, então o grafo original nunca muda.
-- **Menor corte:** `menor_corte` testa todas as combinações de bloqueios até achar a menor quantidade que separa origem de destino. Com só 14 arestas dá para fazer assim, na força bruta.
+- BFS: usa uma fila (`deque`). Eu marco a cidade como visitada na hora em que coloco ela na fila.
+- DFS: usa uma pilha (uma lista). Empilho os vizinhos de trás para frente, assim o primeiro vizinho da lista é o primeiro a ser explorado. Fiz sem recursão para não esbarrar no limite de recursão do Python.
+- Os dois devolvem a lista de cidades do caminho. Se origem e destino forem a mesma cidade, devolvem só `[origem]`. Se não existe caminho, devolvem `None`.
+- Bloqueio: a função `bloquear_conexoes` trabalha numa cópia da rede, então o grafo original nunca muda.
+- Menor corte: a função `menor_corte` testa todas as combinações de bloqueios até achar a menor quantidade que separa origem e destino. Como são só 14 arestas, deu para testar tudo.
 
 ```python
 def normalizar(texto):
@@ -210,12 +304,12 @@ def contar_arestas(caminho):
 
 
 def bloquear_conexoes(rede, bloqueios):
-    # devolve uma CÓPIA da rede sem as conexões bloqueadas (tira nos dois sentidos)
+    # devolve uma cópia da rede sem as conexões bloqueadas (tira dos dois lados)
     copia = {no: vizinhos.copy() for no, vizinhos in rede.items()}
     for a, b in bloqueios:
         a, b = resolver_vertice(rede, a), resolver_vertice(rede, b)
         if b not in rede[a]:
-            raise ValueError(f"A conexão {a}–{b} não existe na rede.")
+            raise ValueError(f"A conexão {a}-{b} não existe na rede.")
         if b in copia[a]:
             copia[a].remove(b)
         if a in copia[b]:
@@ -229,8 +323,8 @@ def arestas_da_rede(rede):
 
 
 def menor_corte(rede, origem, destino):
-    # menor k tal que bloquear k conexões separa origem e destino (força bruta)
-    # devolve (k, lista de todos os cortes com k conexões)
+    # testa k = 1, 2, 3... até achar quantos bloqueios separam origem e destino
+    # devolve k e a lista de todas as combinações com k bloqueios
     arestas = arestas_da_rede(rede)
     for k in range(1, len(arestas) + 1):
         cortes = [c for c in combinations(arestas, k)
@@ -264,90 +358,13 @@ Saída:
 Funções carregadas.
 ```
 
-## 4. Diagrama do grafo
+## 4. Origem e destino escolhidos pelo usuário
 
-P: desenhar o grafo.
+P: o programa tem que deixar o usuário digitar a origem e o destino e avisar quando o nome não existe.
 
-D: as posições são mais ou menos as do mapa (longitude e latitude), só para o desenho ficar fácil de ler. O grafo em si não usa distância.
+R: a função `resolver_vertice` aceita letra maiúscula ou minúscula, com ou sem acento e com espaço sobrando. Se o nome não existe, ela dá erro e sugere cidades parecidas. Também dá erro se o usuário tentar bloquear uma conexão que não existe.
 
-R: nos desenhos, o caminho do BFS fica em azul, o do DFS em laranja, a conexão bloqueada em vermelho tracejado, a origem em verde e o destino em roxo.
-
-```python
-POSICOES = {  # (longitude, latitude) aproximadas, só para desenhar
-    "Brasília": (-47.9, -15.8), "Goiânia": (-49.3, -16.7), "Belo Horizonte": (-43.9, -19.9),
-    "Rio de Janeiro": (-43.2, -22.9), "São Paulo": (-46.6, -23.5), "Curitiba": (-49.3, -25.4),
-    "Florianópolis": (-48.5, -27.6), "Porto Alegre": (-51.2, -30.0),
-    "Cuiabá": (-56.1, -15.6), "Campo Grande": (-54.6, -20.4),
-}
-# posição do rótulo em relação ao nó: (dx, dy, alinhamento horizontal, alinhamento vertical)
-ROTULO_PADRAO = (0.0, 0.95, "center", "bottom")  # em cima do nó
-ROTULOS = {
-    "Goiânia": (-0.8, 0.0, "right", "center"),
-    "Campo Grande": (-0.8, 0.0, "right", "center"),
-    "Belo Horizonte": (0.8, 0.0, "left", "center"),
-    "Rio de Janeiro": (0.8, 0.0, "left", "center"),
-    "São Paulo": (-0.8, 0.3, "right", "center"),
-    "Curitiba": (-0.8, -0.1, "right", "center"),
-    "Florianópolis": (0.8, 0.0, "left", "center"),
-}
-COR_BFS, COR_DFS, COR_BLOQUEIO, COR_BASE = "#1f77b4", "#e6550d", "#d62728", "#b5b5b5"
-COR_ORIGEM, COR_DESTINO = "#2ca02c", "#9467bd"
-
-
-def desenhar(ax, titulo, bloqueios=(), caminho=None, cor_caminho=COR_BFS, destaques=None):
-    bloqueadas = {frozenset(par) for par in bloqueios}
-    no_caminho = {frozenset(par) for par in zip(caminho, caminho[1:])} if caminho else set()
-    for a, b in arestas_da_rede(rede):
-        (x1, y1), (x2, y2) = POSICOES[a], POSICOES[b]
-        chave = frozenset((a, b))
-        if chave in bloqueadas:
-            estilo = dict(color=COR_BLOQUEIO, linestyle="--", linewidth=2.4, zorder=2)
-        elif chave in no_caminho:
-            estilo = dict(color=cor_caminho, linewidth=5, zorder=2)
-        else:
-            estilo = dict(color=COR_BASE, linewidth=1.8, zorder=1)
-        ax.plot([x1, x2], [y1, y2], **estilo)
-    for vertice, (x, y) in POSICOES.items():
-        cor = (destaques or {}).get(vertice, "#ffffff")
-        ax.scatter(x, y, s=420, color=cor, edgecolor="#333333", linewidth=1.5, zorder=3)
-        dx, dy, ha, va = ROTULOS.get(vertice, ROTULO_PADRAO)
-        ax.text(x + dx, y + dy, vertice, ha=ha, va=va, fontsize=9.5, zorder=4,
-                bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85))
-    ax.set_title(titulo, fontsize=12)
-    ax.set_axis_off()
-    ax.margins(0.1)
-
-
-def legenda(fig, caminhos=True, bloqueio=True, origem_destino=True):
-    itens = [Line2D([0], [0], color=COR_BASE, lw=2, label="Conexão disponível")]
-    if caminhos:
-        itens += [Line2D([0], [0], color=COR_BFS, lw=5, label="Caminho BFS"),
-                  Line2D([0], [0], color=COR_DFS, lw=5, label="Caminho DFS")]
-    if bloqueio:
-        itens.append(Line2D([0], [0], color=COR_BLOQUEIO, lw=2.4, ls="--", label="Conexão bloqueada"))
-    if origem_destino:
-        for cor, rotulo in ((COR_ORIGEM, "Origem"), (COR_DESTINO, "Destino")):
-            itens.append(Line2D([0], [0], marker="o", color="w", markerfacecolor=cor,
-                                markeredgecolor="#333333", markersize=11, label=rotulo))
-    fig.legend(handles=itens, loc="lower center", ncol=len(itens), frameon=False, fontsize=10)
-
-
-fig, ax = plt.subplots(figsize=(10, 8))
-desenhar(ax, f"Rede fictícia de conexões — {len(rede)} cidades, {len(ARESTAS)} conexões")
-fig.tight_layout()
-fig.savefig("grafo_diagrama.png", dpi=150, bbox_inches="tight")
-plt.show()
-```
-
-![Diagrama do grafo](grafo_diagrama.png)
-
-## 5. Origem e destino escolhidos pelo usuário
-
-P: o programa precisa deixar o usuário informar origem e destino e validar nome que não existe.
-
-R: a função `resolver_vertice` aceita maiúscula, minúscula, com ou sem acento e espaço sobrando. Se o nome não existe, dá erro e sugere cidades parecidas. Também dá erro se o usuário tentar bloquear uma conexão que não existe.
-
-O modo com `input` fica atrás da chave `EXECUTAR_INTERATIVO`. Para digitar origem, destino e bloqueios (no formato `Cidade A - Cidade B`), é só trocar para `True`. Deixei `False` para o notebook rodar inteiro sem parar.
+A parte com `input` fica ligada pela variável `EXECUTAR_INTERATIVO`. Para digitar origem, destino e bloqueios (no formato `Cidade A - Cidade B`), é só trocar para `True`. Deixei `False` para o notebook rodar até o fim sem parar.
 
 ```python
 # testando a validação
@@ -372,7 +389,7 @@ Saída:
 'Curitba'          -> ERRO: Vértice 'Curitba' não existe na rede. Você quis dizer: Curitiba, Cuiabá?
 'Atlantis'         -> ERRO: Vértice 'Atlantis' não existe na rede.
 
-Bloqueio de conexão que não existe -> ERRO: A conexão Brasília–Curitiba não existe na rede.
+Bloqueio de conexão que não existe -> ERRO: A conexão Brasília-Curitiba não existe na rede.
 ```
 
 ```python
@@ -393,7 +410,7 @@ def ler_bloqueios(rede):
         texto = input("Bloquear conexão ('Cidade A - Cidade B'; Enter para terminar): ").strip()
         if not texto:
             return bloqueios
-        partes = [p.strip() for p in texto.replace("–", "-").split("-")]
+        partes = [p.strip() for p in texto.replace("–", "-").split("-")]  # aceita - ou –
         if len(partes) != 2:
             print("   Use o formato 'Cidade A - Cidade B'.")
             continue
@@ -428,7 +445,7 @@ Saída:
 Modo interativo desligado (EXECUTAR_INTERATIVO = False).
 ```
 
-## 6. Experimentos
+## 5. Experimentos
 
 ### Experimento A - rede completa
 
@@ -446,50 +463,51 @@ Cenário: Normal (rede completa)  |  Brasília → Curitiba
   DFS: Brasília → Goiânia → São Paulo → Belo Horizonte → Rio de Janeiro → Curitiba  (5 arestas)
 ```
 
-R: o BFS achou o caminho com **3 arestas** (Brasília → Goiânia → São Paulo → Curitiba). O DFS achou um com **5 arestas**, passando por Belo Horizonte e Rio de Janeiro antes de chegar em Curitiba. Os dois chegam, mas só o BFS garante o menor caminho.
+R: o BFS achou um caminho com 3 arestas (Brasília → Goiânia → São Paulo → Curitiba). O DFS achou um com 5 arestas, passando por Belo Horizonte e Rio de Janeiro antes de chegar em Curitiba. Os dois chegam lá, mas só o BFS sempre acha o menor caminho.
 
-### Experimento B - bloqueio Goiânia–São Paulo
+### Experimento B - bloqueio Goiânia-São Paulo
 
-P: bloquear a conexão Goiânia–São Paulo e rodar de novo.
+P: bloquear a conexão Goiânia-São Paulo e rodar de novo.
 
-D: esse bloqueio é uma hipótese minha para a simulação, não uma consequência comprovada da pane.
+D: esse bloqueio é uma suposição minha para a simulação, não aconteceu de verdade.
+
+D: na figura, o caminho encontrado fica em azul, a conexão bloqueada em vermelho tracejado, a origem em verde e o destino em roxo.
 
 ```python
 bloqueio_b = [("Goiânia", "São Paulo")]
-comparar(rede, "Brasília", "Curitiba", bloqueio_b, titulo="Bloqueio Goiânia–São Paulo")
+comparar(rede, "Brasília", "Curitiba", bloqueio_b, titulo="Bloqueio Goiânia-São Paulo")
 
-fig, eixos = plt.subplots(2, 2, figsize=(15, 12))
-cenarios = [("Normal", ()), ("Bloqueio Goiânia–São Paulo", bloqueio_b)]
-destaques = {"Brasília": COR_ORIGEM, "Curitiba": COR_DESTINO}
-for linha, (nome, bloqueios) in zip(eixos, cenarios):
-    cenario = bloquear_conexoes(rede, bloqueios) if bloqueios else rede
-    for ax, (alg_nome, alg, cor) in zip(linha, [("BFS", bfs, COR_BFS), ("DFS", dfs, COR_DFS)]):
-        caminho = alg(cenario, "Brasília", "Curitiba")
-        desenhar(ax, f"{nome} — {alg_nome}: {contar_arestas(caminho)} arestas",
-                 bloqueios, caminho, cor, destaques)
+# nesse cenário o BFS e o DFS acham o mesmo caminho, então desenho um só
+cenario_b = bloquear_conexoes(rede, bloqueio_b)
+caminho_b = bfs(cenario_b, "Brasília", "Curitiba")
+assert caminho_b == dfs(cenario_b, "Brasília", "Curitiba")
+
+fig, ax = plt.subplots(figsize=(10, 8))
+desenhar(ax, f"Bloqueio Goiânia-São Paulo: caminho de Brasília até Curitiba ({contar_arestas(caminho_b)} arestas)",
+         bloqueio_b, caminho_b, {"Brasília": COR_ORIGEM, "Curitiba": COR_DESTINO})
 legenda(fig)
-fig.tight_layout(rect=(0, 0.04, 1, 1))
-fig.savefig("grafo_cenarios.png", dpi=150, bbox_inches="tight")
+fig.tight_layout(rect=(0, 0.05, 1, 1))
+fig.savefig("grafo_bloqueio.png", dpi=150, bbox_inches="tight")
 plt.show()
 ```
 
 Saída:
 
 ```text
-Cenário: Bloqueio Goiânia–São Paulo  |  Brasília → Curitiba
+Cenário: Bloqueio Goiânia-São Paulo  |  Brasília → Curitiba
   BFS: Brasília → Goiânia → Campo Grande → Curitiba  (3 arestas)
   DFS: Brasília → Goiânia → Campo Grande → Curitiba  (3 arestas)
 ```
 
-![BFS e DFS nos cenários normal e com bloqueio](grafo_cenarios.png)
+![Rede com a conexão Goiânia-São Paulo bloqueada e o caminho encontrado](grafo_bloqueio.png)
 
-R: sem a conexão Goiânia–São Paulo, os dois acharam o mesmo caminho: Brasília → Goiânia → Campo Grande → Curitiba (**3 arestas**). Aqui o DFS foi bem porque o primeiro ramo que ele tenta (Goiânia) já leva até Curitiba por Campo Grande.
+R: sem a conexão Goiânia-São Paulo, os dois acharam o mesmo caminho: Brasília → Goiânia → Campo Grande → Curitiba (3 arestas). Aqui o DFS se saiu bem porque o primeiro vizinho que ele tenta (Goiânia) já leva até Curitiba passando por Campo Grande.
 
 ### Experimento C - segunda conexão bloqueada
 
-P: bloquear mais uma conexão e ver se ainda existe caminho. Justificar usando conectividade.
+P: bloquear mais uma conexão e ver se ainda existe caminho, explicando com conectividade.
 
-D: bloqueei Goiânia–São Paulo e Belo Horizonte–Rio de Janeiro. Depois calculei o menor número de bloqueios que isola Brasília de Curitiba.
+D: bloqueei Goiânia-São Paulo e Belo Horizonte-Rio de Janeiro. Depois calculei o menor número de bloqueios que separa Brasília de Curitiba.
 
 ```python
 bloqueios_c = [("Goiânia", "São Paulo"), ("Belo Horizonte", "Rio de Janeiro")]
@@ -500,7 +518,7 @@ k, cortes = menor_corte(rede, "Brasília", "Curitiba")
 print(f"Menor número de conexões que isola Brasília de Curitiba: {k}")
 print(f"Combinações de {k} bloqueios que separam as duas: {len(cortes)}")
 for corte in cortes:
-    print("  -", " | ".join(f"{a}–{b}" for a, b in corte))
+    print("  -", " | ".join(f"{a}-{b}" for a, b in corte))
 
 print("\nCaminhos entre Brasília e Curitiba sem nenhuma aresta em comum (networkx):")
 G_REF = nx.Graph([(a, b) for a, b, _ in ARESTAS])
@@ -520,10 +538,10 @@ Cenário: Bloqueio duplo  |  Brasília → Curitiba
 
 Menor número de conexões que isola Brasília de Curitiba: 3
 Combinações de 3 bloqueios que separam as duas: 4
-  - Belo Horizonte–Brasília | Brasília–Cuiabá | Brasília–Goiânia
-  - Belo Horizonte–Brasília | Brasília–Goiânia | Campo Grande–Cuiabá
-  - Belo Horizonte–Brasília | Campo Grande–Curitiba | Goiânia–São Paulo
-  - Campo Grande–Curitiba | Curitiba–Rio de Janeiro | Curitiba–São Paulo
+  - Belo Horizonte-Brasília | Brasília-Cuiabá | Brasília-Goiânia
+  - Belo Horizonte-Brasília | Brasília-Goiânia | Campo Grande-Cuiabá
+  - Belo Horizonte-Brasília | Campo Grande-Curitiba | Goiânia-São Paulo
+  - Campo Grande-Curitiba | Curitiba-Rio de Janeiro | Curitiba-São Paulo
 
 Caminhos entre Brasília e Curitiba sem nenhuma aresta em comum (networkx):
   - Brasília → Goiânia → São Paulo → Curitiba
@@ -535,9 +553,9 @@ Cenário: Um corte mínimo (3 bloqueios)  |  Brasília → Curitiba
   DFS: sem caminho (origem e destino ficaram separados)
 ```
 
-R: com os dois bloqueios ainda existe caminho (Brasília → Goiânia → Campo Grande → Curitiba), e BFS e DFS acharam o mesmo.
+R: com os dois bloqueios ainda existe caminho (Brasília → Goiânia → Campo Grande → Curitiba), e o BFS e o DFS acharam o mesmo.
 
-Pela conectividade: existem **3 caminhos entre Brasília e Curitiba que não dividem nenhuma aresta** (pela Goiânia–São Paulo, pela Belo Horizonte–Rio e pela Cuiabá–Campo Grande). Cada bloqueio quebra no máximo um deles, então com 1 ou 2 bloqueios sempre sobra um caminho. Para separar as duas cidades são necessários **3 bloqueios**, e existem 4 combinações que fazem isso (por exemplo, as 3 conexões de Brasília). Isso bate com o teorema de Menger, e eu conferi o número 3 nos testes com `nx.edge_connectivity`.
+Existem 3 caminhos entre Brasília e Curitiba que não têm nenhuma aresta em comum (um pela Goiânia-São Paulo, outro pela Belo Horizonte-Rio e outro pela Cuiabá-Campo Grande). Cada bloqueio corta no máximo um deles, então com 1 ou 2 bloqueios sempre sobra um caminho. Para separar as duas cidades precisa de 3 bloqueios, e existem 4 combinações que fazem isso (uma delas são as 3 conexões de Brasília). Isso bate com o teorema de Menger, e conferi o número 3 nos testes com `nx.edge_connectivity`.
 
 ### Experimento D - ordem dos vizinhos
 
@@ -574,7 +592,7 @@ Cenário: Vizinhos de Brasília invertidos  |  Brasília → Curitiba
   DFS: Brasília → Cuiabá → Campo Grande → Goiânia → São Paulo → Belo Horizonte → Rio de Janeiro → Curitiba  (7 arestas)
 ```
 
-R: o DFS foi de **5** para **7 arestas** só por causa da ordem da lista. Ele sempre vai fundo no primeiro vizinho que encontra (agora Cuiabá → Campo Grande → Goiânia → São Paulo → ...) antes de testar os outros. O BFS continuou com 3 arestas, porque ele olha todos os vizinhos de cada nível antes de descer.
+R: o DFS foi de 5 para 7 arestas só por causa da ordem da lista. Ele sempre vai fundo no primeiro vizinho que aparece (agora Cuiabá → Campo Grande → Goiânia → São Paulo → ...) antes de testar os outros. O BFS continuou com 3 arestas, porque ele olha todos os vizinhos de um nível antes de descer para o próximo.
 
 ### Experimento E - todos os pares de cidades (extra)
 
@@ -590,7 +608,7 @@ mais_longos = sum(1 for b, d in zip(comp_bfs, comp_dfs) if d > b)
 print(f"Pares ordenados analisados: {len(pares)}")
 print(f"Média de arestas - BFS: {sum(comp_bfs) / len(pares):.2f} | DFS: {sum(comp_dfs) / len(pares):.2f}")
 print(f"Pares em que o DFS devolveu caminho mais longo que o BFS: {mais_longos} ({mais_longos / len(pares):.0%})")
-print(f"Maior diferença (DFS − BFS): {max(d - b for b, d in zip(comp_bfs, comp_dfs))} arestas")
+print(f"Maior diferença (DFS menos BFS): {max(d - b for b, d in zip(comp_bfs, comp_dfs))} arestas")
 ```
 
 Saída:
@@ -599,16 +617,16 @@ Saída:
 Pares ordenados analisados: 90
 Média de arestas - BFS: 2.16 | DFS: 4.31
 Pares em que o DFS devolveu caminho mais longo que o BFS: 59 (66%)
-Maior diferença (DFS − BFS): 6 arestas
+Maior diferença (DFS menos BFS): 6 arestas
 ```
 
 R: em média o BFS usou 2,16 arestas e o DFS 4,31. Em 59 dos 90 pares (66%) o DFS achou um caminho mais longo que o BFS, e a maior diferença foi de 6 arestas.
 
-## 7. Testes
+## 6. Testes
 
-P: testar se as funções estão corretas, inclusive os casos de erro e de "sem caminho".
+P: testar se as funções estão certas, incluindo os casos de erro e de "sem caminho".
 
-R: usei o `unittest` e comparei meus resultados com o `networkx` (menor caminho, conectividade e conectividade por arestas). A última linha da célula dá erro se algum teste falhar, então a saída abaixo mostra que todos rodaram.
+R: usei o `unittest` e comparei meus resultados com os do `networkx` (menor caminho, existência de caminho e conectividade por arestas). A última linha da célula dá erro se algum teste falhar, então se a saída abaixo terminou em `OK`, todos passaram.
 
 ```python
 def grafo_ref(bloqueios=()):
@@ -724,14 +742,14 @@ test_origem_igual_destino (__main__.TestesGrafo.test_origem_igual_destino) ... o
 test_vertice_inexistente_gera_erro_com_sugestao (__main__.TestesGrafo.test_vertice_inexistente_gera_erro_com_sugestao) ... ok
 
 ----------------------------------------------------------------------
-Ran 11 tests in 0.193s
+Ran 11 tests in 0.199s
 
 OK
 ```
 
-R: rodei **11 testes** e todos passaram (`OK`). Eles cobrem: grafo simétrico com pelo menos 7 vértices; BFS com o menor caminho e DFS com caminho válido em todos os pares; origem igual ao destino; nome inexistente e normalização de acento e maiúscula; bloqueio sem alterar a rede original; conexão inexistente; caso sem caminho; conectividade igual à do `networkx` para todos os bloqueios de 1 e 2 conexões; menor corte; e a dependência do DFS na ordem dos vizinhos.
+R: rodei 11 testes e todos passaram (`OK`). Eles testam: se o grafo tem pelo menos 7 vértices e é simétrico; se o BFS acha o menor caminho e o DFS acha um caminho válido em todos os pares; origem igual ao destino; nome que não existe e nome com acento ou maiúscula; se o bloqueio deixa a rede original intacta; conexão que não existe; caso sem caminho; se a conectividade bate com a do `networkx` para todos os bloqueios de 1 e 2 conexões; o menor corte; e se o DFS muda com a ordem dos vizinhos.
 
-## 8. BFS x DFS e limitações
+## 7. BFS x DFS e limitações
 
 P: comparar BFS e DFS e explicar as limitações da minha solução.
 
@@ -741,41 +759,41 @@ R:
 |---|---|---|
 | Estrutura | fila (FIFO) | pilha (LIFO) |
 | Como explora | por níveis, do mais perto para o mais longe | vai fundo em um ramo antes de voltar |
-| Menor número de arestas (sem pesos) | garante | não garante |
+| Menor número de arestas (sem pesos) | sempre acha | nem sempre acha |
 | Custo da busca | O(V + E) | O(V + E) |
-| Ordem dos vizinhos | só desempata caminhos do mesmo tamanho | pode mudar o tamanho do caminho (Experimento D) |
+| Ordem dos vizinhos | só decide entre caminhos do mesmo tamanho | pode mudar o tamanho do caminho (Experimento D) |
 
-Nos testes, os dois sempre concordaram sobre **existir ou não** um caminho. A diferença está no tamanho do caminho que cada um devolve (3 contra 5 arestas no Experimento A).
+Nos testes, os dois sempre concordaram sobre existir ou não um caminho. A diferença está no tamanho do caminho que cada um devolve (3 contra 5 arestas no Experimento A).
 
 Limitações:
-- A rede é inventada, não dirigida e sem pesos. "Menor" quer dizer menos arestas, não menos tempo, distância ou combustível.
-- Não tem regra de aviação, capacidade, horário, clima ou espaço aéreo. O resultado **não** serve para orientar voo real.
-- Eu guardo o caminho inteiro em cada item da fila/pilha (`caminho + [vizinho]`). Funciona bem aqui, mas copia lista várias vezes. Em grafo grande o melhor seria guardar só o "pai" de cada vértice.
-- O menor corte na força bruta só é viável com poucas arestas. Em rede grande o certo seria usar fluxo máximo.
-- Os bloqueios são hipóteses minhas, não consequência comprovada da pane.
+- A rede é inventada, não dirigida e sem pesos. "Menor" aqui quer dizer menos arestas, e não menos tempo, distância ou combustível.
+- Não considerei regras de aviação, capacidade, horário, clima nem espaço aéreo. O resultado não serve para orientar voo real.
+- Guardo o caminho inteiro em cada item da fila e da pilha (`caminho + [vizinho]`). Aqui funciona, mas copia a lista várias vezes. Em um grafo grande seria melhor guardar só o "pai" de cada vértice.
+- O menor corte testando todas as combinações só funciona com poucas arestas. Em uma rede grande o certo seria usar fluxo máximo.
+- Os bloqueios são suposições minhas, não vieram de dados da pane.
 
-## 9. Questões para reflexão
+## 8. Questões para reflexão
 
 P: Por que um grafo representa melhor a rede de conexões do que uma árvore binária?
 
-R: na árvore binária cada nó tem no máximo dois filhos e existe **um único caminho** entre dois nós, então tirar qualquer aresta separa a estrutura. Numa rede de conexões existem cidades com mais de duas ligações (São Paulo tem 4), ciclos e rotas alternativas, que é o que permite escolher outro caminho quando uma conexão cai.
+R: na árvore binária cada nó tem no máximo dois filhos e só existe um caminho entre dois nós, então tirar qualquer aresta separa a estrutura. Numa rede de conexões tem cidade com mais de duas ligações (São Paulo tem 4), ciclos e rotas alternativas, e é isso que permite escolher outro caminho quando uma conexão cai.
 
 P: Em qual condição o BFS encontra o menor caminho? O que significa "menor"?
 
-R: quando o grafo não tem pesos (ou todas as arestas valem o mesmo), porque o BFS explora por níveis. "Menor" é o menor **número de arestas**, e não o menor tempo, distância ou combustível.
+R: quando o grafo não tem pesos (ou todas as arestas valem o mesmo), porque o BFS explora por níveis. "Menor" é o menor número de arestas, e não o menor tempo, distância ou combustível.
 
 P: Por que o DFS pode retornar um caminho diferente do BFS?
 
-R: o DFS vai até o fim de um ramo antes de voltar, e o primeiro caminho que ele encontra depende da ordem dos vizinhos. No Experimento A foram 5 arestas contra 3 do BFS, e no D, com a lista de Brasília invertida, o DFS chegou a 7.
+R: o DFS vai até o fim de um ramo antes de voltar, e o primeiro caminho que ele encontra depende da ordem dos vizinhos. No Experimento A foram 5 arestas contra 3 do BFS, e no D, com a lista de Brasília invertida, o DFS foi para 7.
 
 P: O que acontece se eu não usar o conjunto de visitados?
 
-R: em grafo com ciclos (e em grafo não dirigido, onde dá para voltar por toda aresta) a busca fica revisitando as mesmas cidades. Se o destino é alcançável pode até terminar, mas com trabalho repetido; se não existe caminho, ela nunca termina.
+R: em um grafo com ciclos (e em grafo não dirigido, onde dá para voltar por qualquer aresta) a busca fica passando pelas mesmas cidades de novo. Se dá para chegar no destino, ela pode até terminar, mas fazendo trabalho repetido. Se não existe caminho, nunca termina.
 
 P: Quais informações a mais seriam necessárias para avaliar tempo ou custo de uma rota?
 
-R: pesos nas arestas (tempo de voo, distância, custo, consumo), direção das conexões (grafo dirigido), horários, capacidade dos aeroportos e restrições operacionais. Com pesos, o BFS daria lugar a algoritmos como o de Dijkstra.
+R: pesos nas arestas (tempo de voo, distância, custo, consumo), direção das conexões (grafo dirigido), horários, capacidade dos aeroportos e restrições de operação. Com pesos, o BFS daria lugar a algoritmos como o de Dijkstra.
 
 P: Por que o resultado do algoritmo não pode ser usado para orientar um voo real?
 
-R: porque o modelo é só um exercício: a rede é inventada e não considera regras de navegação, separação entre aeronaves, clima, autorizações nem capacidade. Operação aérea precisa de sistemas certificados e dados reais.
+R: porque o modelo é só um exercício: a rede é inventada e não considera regras de navegação, distância entre aeronaves, clima, autorizações nem capacidade. Operação aérea precisa de sistemas certificados e dados reais.
